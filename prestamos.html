@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innova School - Prestamos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="Css/estilos.css">
+</head>
+<body class="bg-light">
+    <!-- Barra superior -->
+  <nav class="bg-dark text-white py-2">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <span class="small text-secondary">Módulo de Circulación y Control de Activos</span>
+      <div class="d-flex align-items-center gap-3">
+        <span class="badge bg-primary px-3 py-2" id="badgeRol">Rol: Técnico</span>
+        <span class="small text-light" id="txtUsuario">usuario</span>
+        <button class="btn btn-outline-danger btn-sm" id="btnCerrarSesion">
+          <i class="bi bi-box-arrow-right"></i> Salir
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Barra de Navegación -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold text-primary" href="boostrap.html">
+        <i class="bi bi-cpu me-1"></i>Innova Schools
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="menu">
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="boostrap.html">Inicio</a>
+          <a class="nav-link" href="inventario.html">Inventario</a>
+          <a class="nav-link active fw-bold" href="prestamos.html">Préstamos</a>
+          <a class="nav-link" href="mantenimiento.html">Mantenimiento</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenido -->
+  <div class="container my-5">
+    
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h2 class="fw-bold text-dark mb-1">Control de Préstamos y Devoluciones</h2>
+        <p class="text-muted mb-0">Gestión de salidas físicas de equipos y registro de recepciones de activos.</p>
+      </div>
+      <div class="mt-3 mt-md-0">
+        <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNuevoPrestamo">
+          <i class="bi bi-plus-circle me-1"></i> Registrar Préstamo
+        </button>
+      </div>
+    </div>
+
+    <!-- Filtros de búsqueda -->
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-5">
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control" placeholder="Buscar por código de equipo o DNI solicitante...">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <select class="form-select">
+              <option selected>Todos los estados</option>
+              <option>Activos (En posesión)</option>
+              <option>Devueltos</option>
+              <option>Atrasados</option>
+            </select>
+          </div>
+          <div class="col-md-3 d-grid">
+            <button class="btn btn-dark"><i class="bi bi-funnel me-1"></i> Filtrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de Préstamos -->
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col" class="ps-3">ID Préstamo</th>
+                <th scope="col">Equipo</th>
+                <th scope="col">Solicitante / Responsable</th>
+                <th scope="col">Fecha Salida</th>
+                <th scope="col">Fecha Límite</th>
+                <th scope="col" class="text-center">Estado</th>
+                <th scope="col" class="text-end pe-3">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="ps-3 fw-bold text-secondary">PR-2026-001</td>
+                <td>
+                  <strong>Kit Robótica LEGO Mindstorms EV3</strong>
+                  <br><small class="text-muted">EQ-INN-102</small>
+                </td>
+                <td>
+                  <span>Carlos Mendoza Ríos</span>
+                  <br><small class="text-muted">carlos.mendoza@innovaschools.edu.pe</small>
+                </td>
+                <td>21/09/2026 09:30</td>
+                <td>21/09/2026 13:30</td>
+                <td class="text-center">
+                  <span class="badge rounded-pill bg-warning text-dark px-3 py-2">
+                    <i class="bi bi-clock-history me-1"></i> En Préstamo
+                  </span>
+                </td>
+                <td class="text-end pe-3">
+                  <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalDevolucion" 
+                          data-id="PR-2026-001" data-equipo="Kit Robótica LEGO EV3 (EQ-INN-102)">
+                    <i class="bi bi-box-arrow-in-down me-1"></i> Registrar Devolución
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="ps-3 fw-bold text-secondary">PR-2026-002</td>
+                <td>
+                  <strong>Laptop Lenovo ThinkPad L14</strong>
+                  <br><small class="text-muted">EQ-INN-105</small>
+                </td>
+                <td>
+                  <span>Valeria Quispe Ramos</span>
+                  <br><small class="text-muted">valeria.quispe@innovaschools.edu.pe</small>
+                </td>
+                <td>20/09/2026 10:00</td>
+                <td>20/09/2026 18:00</td>
+                <td class="text-center">
+                  <span class="badge rounded-pill bg-success px-3 py-2">
+                    <i class="bi bi-check-circle me-1"></i> Devuelto
+                  </span>
+                </td>
+                <td class="text-end pe-3">
+                  <button class="btn btn-sm btn-outline-secondary" disabled>
+                    <i class="bi bi-check-all"></i> Cerrado
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Registrar Préstamo -->
+  <div class="modal fade" id="modalNuevoPrestamo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title fw-bold"><i class="bi bi-box-arrow-up-right me-2"></i>Nueva Salida de Equipo</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="formNuevoPrestamo">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Seleccionar Equipo Disponible</label>
+              <select class="form-select" required>
+                <option value="">Selecciona un equipo...</option>
+                <option>EQ-INN-101 - Laptop Dell Precision 3560 (Lab B-204)</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Correo o DNI del Responsable</label>
+              <input type="text" class="form-control" placeholder="Ej. estudiante@innovaschools.edu.pe" required>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Fecha y Hora de Salida</label>
+                <input type="datetime-local" class="form-control" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Fecha Límite Retorno</label>
+                <input type="datetime-local" class="form-control" required>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer bg-light">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="alert('Préstamo registrado. El equipo pasa a estado: En Préstamo.')">Confirmar Entrega</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+        document.getElementById('txtUsuario').textContent= localStorage.getItem('usuarioActivo') || 'Docente';
+        document.getElementById('badgeRol').textContent = 'Rol: ' + (localStorage.getItem('rolActivo') || 'Tecnico');
+
+        document.getElementById('btnCerrarSesion').addEventListener('click', function(){
+            localStorage.removeItem('usuarioActivo');
+            localStorage.removeItem('rolActivo');
+            window.location.href = 'boostrap.html';
+        });
+  </script>
+</body>
+</html>
