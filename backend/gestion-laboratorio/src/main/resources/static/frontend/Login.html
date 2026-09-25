@@ -50,16 +50,44 @@
         </form>
     </div>
     
-    <script>
-        document.getElementById('formLogin').addEventListener('submit', function(e){
-            e.preventDefault();
-            const correo =document.getElementById('correo').value;
-            const rol= document.getElementById('rol').value;
-            localStorage.setItem('usuarioActivo', correo);
-            localStorage.setItem('rolActivo', rol);
+<script>
+  document.getElementById('formLogin').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-            window.location.href = 'boostrap.html';
-        });
-    </script>
+    const correo = document.getElementById('correo').value;
+    const password = document.getElementById('password').value;
+    const rol = document.getElementById('rol').value;
+
+    fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        correo: correo,
+        password: password,
+        rol: rol
+      })
+    })
+    .then(respuesta => {
+      if (!respuesta.ok) {
+        throw new Error('Credenciales incorrectas');
+      }
+      return respuesta.text();
+    })
+    .then(token => {
+      // Guardar el token JWT y los datos de sesión en el navegador
+      localStorage.setItem('token', token);
+      localStorage.setItem('usuarioActivo', correo);
+      localStorage.setItem('rolActivo', rol);
+
+      // Redirigir a la vista principal
+      window.location.href = 'boostrap.html';
+    })
+    .catch(error => {
+      alert('Error de inicio de sesión: Verifique su correo o contraseña');
+    });
+  });
+</script>
 </body>
 </html>
