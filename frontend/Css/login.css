@@ -1,0 +1,96 @@
+/* LOGIN - Innova Schools */
+body.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(13, 110, 253, 0.35), transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(102, 16, 242, 0.30), transparent 45%),
+        linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    background-attachment: fixed;
+    position: relative;
+}
+
+body.login-page::before,
+body.login-page::after {
+    content: "";
+    position: fixed;
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+}
+body.login-page::before {
+    width: 320px; height: 320px;
+    top: -100px; right: -80px;
+    background: rgba(255, 255, 255, 0.06);
+}
+body.login-page::after {
+    width: 420px; height: 420px;
+    bottom: -160px; left: -120px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.card-login {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+    border: 0;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+    animation: login-in 0.5s ease-out both;
+}
+
+@keyframes login-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.login-logo {
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    box-shadow: 0 10px 25px rgba(13, 110, 253, 0.4);
+}
+
+.card-login .input-group {
+    flex-wrap: nowrap;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.card-login .input-group:hover { border-color: #cbd5e1; }
+.card-login .input-group:focus-within {
+    background: #fff;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.12);
+}
+
+.card-login .input-group-text,
+.card-login .input-group .form-control,
+.card-login .input-group .form-select,
+.card-login .toggle-pass {
+    color: #94a3b8;
+    padding: 0 0.9rem;
+}
+.toggle-pass:hover { color: #0d6efd; }
+
+.login-footer {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+.card-login .form-select {
+    font-weight: 600;
+    color: #1e293b;
+}
+.card-login .form-select option {
+    font-weight: 600;
+    color: #1e293b;
+    background: #fff;
+}

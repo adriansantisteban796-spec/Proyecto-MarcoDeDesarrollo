@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -25,5 +26,24 @@ public class JwtService {
                 .expiration(new Date(System.currentTimeMillis() + 3600000))
                 .signWith(key)
                 .compact();
+    }
+
+    // Devuelve el rol guardado en el token, o null si el token no es válido o venció
+    public String obtenerRol(String token) {
+
+        try {
+            SecretKey key = Keys.hmacShaKeyFor(claveSecreta.getBytes());
+
+            Claims claims = Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            return claims.get("rol", String.class);
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

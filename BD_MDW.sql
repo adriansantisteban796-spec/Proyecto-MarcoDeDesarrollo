@@ -306,6 +306,33 @@ LOCK TABLES `reserva` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `reserva_laboratorio`
+--
+
+DROP TABLE IF EXISTS `reserva_laboratorio`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `reserva_laboratorio` (
+  `id_reserva` int NOT NULL AUTO_INCREMENT,
+  `laboratorio` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `fecha` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `hora_inicio` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `hora_fin` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `estado` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id_reserva`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reserva_laboratorio`
+--
+
+LOCK TABLES `reserva_laboratorio` WRITE;
+/*!40000 ALTER TABLE `reserva_laboratorio` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reserva_laboratorio` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `rol`
 --
 
@@ -386,7 +413,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES ('Nico1306@innovaschools.edu.pe','Romero','Nicole','Roblor84','Docente');
+INSERT INTO `usuarios` VALUES ('Nico1306@innovaschools.edu.pe','Romero','Nicole','Roblor84','Docente'),('coordinador@hotmail.com','Coordinador','Laboratorio','coordinador','Coordinador');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

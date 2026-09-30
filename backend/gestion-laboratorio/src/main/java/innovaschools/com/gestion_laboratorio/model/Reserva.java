@@ -1,11 +1,28 @@
 package innovaschools.com.gestion_laboratorio.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "reserva_laboratorio")
 public class Reserva {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id_reserva;
 
     private String laboratorio;
     private String fecha;
     private String horaInicio;
     private String horaFin;
+    private String estado; // PENDIENTE, APROBADA, CANCELADA
+
+    public Integer getId_reserva() {
+        return id_reserva;
+    }
+
+    public void setId_reserva(Integer id_reserva) {
+        this.id_reserva = id_reserva;
+    }
 
     public String getLaboratorio() {
         return laboratorio;
@@ -37,5 +54,13 @@ public class Reserva {
 
     public void setHoraFin(String horaFin) {
         this.horaFin = horaFin;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }

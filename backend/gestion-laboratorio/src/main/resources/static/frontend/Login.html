@@ -1,93 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Innova School - Login</title>
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="Css/estilos.css">
+    <link rel="stylesheet" href="Css/login.css">
 </head>
-<body>
-    <div class="card card-login bg-white p-4 p-md-5">
+<body class="login-page">
+    <div class="card card-login p-4 p-md-5">
         <div class="text-center mb-4">
-            <div class="bg-primary text-white d-inline-flex align-items-center justify-content-center rounded-circle mb-3" estilos="width: 60px; heigth: 60px;">
-                <i class="bi bi-shield-lock-fill fs-3"></i>
+            <div class="login-logo text-white d-inline-flex align-items-center justify-content-center rounded-circle mb-3">
+                <i class="bi bi-shield-lock-fill fs-2"></i>
             </div>
             <h3 class="fw-bold text-dark mb-1">Innova Schools</h3>
-            <p class="text-muted small">Gestion de Reservas de Laboratorio</p>
+            <p class="text-muted small mb-0">Gestion de Reservas de Laboratorio</p>
         </div>
+
+        <div id="loginError" class="alert alert-danger py-2 small d-none" role="alert"></div>
 
         <form id="formLogin">
             <div class="mb-3">
-                <label class="form-label fw-semibold text-secondary">Correo Institucional</label>
+                <label for="correo" class="form-label fw-semibold text-secondary">Correo Institucional</label>
                 <div class="input-group">
-                    <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                     <input type="email" id="correo" class="form-control" placeholder="usuario@innovaschools.edu.pe" required>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-semibold text-secondary">Contraseña</label>
+                <label for="password" class="form-label fw-semibold text-secondary">Contraseña</label>
                 <div class="input-group">
-                    <span class="input-group-text bg-ligth"><i class="bi bi-key"></i></span>
-                    <input type="password" id="password" class="form-control" placeholder="........" required>
+                    <span class="input-group-text"><i class="bi bi-key"></i></span>
+                    <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                    <button type="button" class="btn toggle-pass" id="togglePass" aria-label="Mostrar contraseña">
+                        <i class="bi bi-eye"></i>
+                    </button>
                 </div>
             </div>
 
             <div class="mb-4">
-                <label class="form-label fw-semibold text-secondary">Perfil / Rol de Acceso</label>
-                <select  id="rol" class="form-select">
-                    <option value="Docente/Estudiante">Docente / Estudiante</option>
-                    <option value="Coordinador">Coordinador de Laboratorio</option>
-                    <option value="Tecnico">Tecnico de Soporte</option>
-                </select>
+                <label for="rol" class="form-label fw-semibold text-secondary">Perfil / Rol de Acceso</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+                    <select id="rol" class="form-select">
+                        <option value="Docente/Estudiante">Docente / Estudiante</option>
+                        <option value="Coordinador">Coordinador de Laboratorio</option>
+                        <option value="Tecnico">Tecnico de Soporte</option>
+                    </select>
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold shadow-sm">
-                <i class="bi bi-box-arrow-in-rigth me-1"></i>Ingresar al Sistema
+            <button type="submit" class="btn btn-primary btn-login w-100 py-2 fw-semibold shadow-sm">
+                <i class="bi bi-box-arrow-in-right me-1"></i>Ingresar al Sistema
             </button>
         </form>
+
+        <p class="login-footer text-center mt-4 mb-0">&copy; Innova Schools · Laboratorio</p>
     </div>
-    
+
 <script>
-  document.getElementById('formLogin').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const correo = document.getElementById('correo').value;
-    const password = document.getElementById('password').value;
-    const rol = document.getElementById('rol').value;
-
-    fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        correo: correo,
-        password: password,
-        rol: rol
-      })
-    })
-    .then(respuesta => {
-      if (!respuesta.ok) {
-        throw new Error('Credenciales incorrectas');
-      }
-      return respuesta.text();
-    })
-    .then(token => {
-      // Guardar el token JWT y los datos de sesión en el navegador
-      localStorage.setItem('token', token);
-      localStorage.setItem('usuarioActivo', correo);
-      localStorage.setItem('rolActivo', rol);
-
-      // Redirigir a la vista principal
-      window.location.href = 'boostrap.html';
-    })
-    .catch(error => {
-      alert('Error de inicio de sesión: Verifique su correo o contraseña');
+    document.getElementById('togglePass').addEventListener('click', function () {
+        const input = document.getElementById('password');
+        const show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        this.querySelector('i').className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
     });
-  });
+
+    document.getElementById('formLogin').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const correo = document.getElementById('correo').value;
+        const password = document.getElementById('password').value;
+        const rol = document.getElementById('rol').value;
+
+        const error = document.getElementById('loginError');
+        error.classList.add('d-none');
+
+        fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                correo: correo,
+                password: password,
+                rol: rol
+            })
+        })
+        .then(respuesta => respuesta.text().then(texto => ({ ok: respuesta.ok, texto })))
+        .then(({ ok, texto }) => {
+            if (!ok) {
+                error.textContent = texto || 'No se pudo iniciar sesión';
+                error.classList.remove('d-none');
+                return;
+            }
+            localStorage.setItem('token', texto);
+            localStorage.setItem('usuarioActivo', correo);
+            let rolReal = rol;
+            try { rolReal = JSON.parse(atob(texto.split('.')[1])).rol || rol; } catch (e) {}
+            localStorage.setItem('rolActivo', rolReal);
+            window.location.href = 'boostrap.html';
+        })
+        .catch(() => {
+            error.textContent = 'No se pudo conectar con el servidor';
+            error.classList.remove('d-none');
+        });
+    });
 </script>
 </body>
 </html>

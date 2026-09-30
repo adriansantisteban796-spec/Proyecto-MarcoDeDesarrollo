@@ -44,6 +44,8 @@
             <p class="text-muted mb-0">Consulta el estado fisico de los activos y solicita reservas en tiempo real.</p>
         </div>
         <div class="mt-3 mt-md-0">
+            <a href="reservas.html" class="btn btn-outline-primary me-2"><i
+                    class="bi bi-calendar-check me-1"></i>Mis Reservas</a>
             <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalIncidencia"><i
                     class="bi bi-exclamation-triangle-fill me-1"></i>Reportar Incidencia</button>
         </div>
@@ -119,7 +121,7 @@
                                 </button>
                                 <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#modalReserva"
-                                    data-equipo="Laptop Dell Precision 3560 (EQ-INN-101)">
+                                    data-equipo="Laptop Dell Precision 3560 (EQ-INN-101)" data-lab="Lab B-204">
                                     <i class="bi bi-calendar-plus"></i> Reservar
                                 </button>
                             </td>
@@ -228,19 +230,23 @@
                             <input type="text" id="campoEquipoReserva" class="form-control bg-light"
                                 value="Laptop Dell Precision 3560 (EQ-INN-101)" readonly>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Laboratorio</label>
+                            <input type="text" id="campoLabReserva" class="form-control bg-light" readonly>
+                        </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Fecha de Uso</label>
-                                <input type="date" class="form-control" required>
+                                <input type="date" id="campoFechaReserva" class="form-control" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Horario (Bloque)</label>
-                                <select class="form-select" required>
+                                <select id="campoHorarioReserva" class="form-select" required>
                                     <option value="">Selecciona hora...</option>
-                                    <option>08:00 - 10:00</option>
-                                    <option>10:00 - 12:00</option>
-                                    <option>14:00 - 16:00</option>
-                                    <option>16:00 - 18:00</option>
+                                    <option value="08:00|10:00">08:00 - 10:00</option>
+                                    <option value="10:00|12:00">10:00 - 12:00</option>
+                                    <option value="14:00|16:00">14:00 - 16:00</option>
+                                    <option value="16:00|18:00">16:00 - 18:00</option>
                                 </select>
                             </div>
                         </div>
@@ -250,6 +256,7 @@
                                 placeholder="Describe brevemente el uso que se le dará al equipo..."
                                 required></textarea>
                         </div>
+                        <div id="errorReserva" class="alert alert-danger py-2 small d-none"></div>
                         <div class="alert alert-info py-2 small mb-0">
                             <i class="bi bi-info-circle-fill me-1"></i> La solicitud quedará en estado
                             <strong>Pendiente</strong> hasta la aprobación del Coordinador.
@@ -258,14 +265,13 @@
                 </div>
                 <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary px-4" data-bs-dismiss="modal"
-                        onclick="alert('¡Solicitud de reserva registrada correctamente!')">Enviar Solicitud</button>
+                    <button type="button" class="btn btn-primary px-4" id="btnEnviarReserva">Enviar Solicitud</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== MODAL 2: DETALLES DEL ACTIVO ==================== -->
+    <!--DETALLES DEL ACTIVO-->
     <div class="modal fade" id="modalDetalle" tabindex="-1" aria-labelledby="modalDetalleLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
@@ -367,6 +373,53 @@
                 document.getElementById('detLab').textContent = lab;
             });
         }
+
+        const modalReservaEl = document.getElementById('modalReserva');
+        modalReservaEl.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            document.getElementById('formReserva').reset();
+            if (button) {
+                document.getElementById('campoEquipoReserva').value = button.getAttribute('data-equipo');
+                document.getElementById('campoLabReserva').value = button.getAttribute('data-lab');
+            }
+            document.getElementById('campoFechaReserva').min = new Date().toISOString().split('T')[0];
+            document.getElementById('errorReserva').classList.add('d-none');
+        });
+
+        document.getElementById('btnEnviarReserva').addEventListener('click', function () {
+            const form = document.getElementById('formReserva');
+            const error = document.getElementById('errorReserva');
+            error.classList.add('d-none');
+
+            if (!form.reportValidity()) return;
+
+            const [horaInicio, horaFin] = document.getElementById('campoHorarioReserva').value.split('|');
+
+            fetch('/api/reservas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    laboratorio: document.getElementById('campoLabReserva').value,
+                    fecha: document.getElementById('campoFechaReserva').value,
+                    horaInicio: horaInicio,
+                    horaFin: horaFin
+                })
+            })
+            .then(res => res.text().then(texto => ({ ok: res.ok, texto })))
+            .then(({ ok, texto }) => {
+                if (!ok) {
+                    error.textContent = texto || 'No se pudo registrar la reserva.';
+                    error.classList.remove('d-none');
+                    return;
+                }
+                bootstrap.Modal.getInstance(modalReservaEl).hide();
+                alert('¡Solicitud de reserva registrada! Quedó en estado Pendiente.');
+            })
+            .catch(() => {
+                error.textContent = 'No se pudo conectar con el servidor.';
+                error.classList.remove('d-none');
+            });
+        });
     </script>
 </body>
 
