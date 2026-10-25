@@ -16,9 +16,9 @@ public class UsuarioController {
         this.usuarioRepository = usuarioRepository;
     }
 
+    // Registrar usuario
     @PostMapping
     public ResponseEntity<?> registrarUsuario(@RequestBody Usuario usuario) {
-
         Usuario usuarioExistente =
                 usuarioRepository.findByCorreo(usuario.getCorreo());
 
@@ -28,7 +28,57 @@ public class UsuarioController {
         }
 
         Usuario nuevoUsuario = usuarioRepository.save(usuario);
+        return ResponseEntity.status(201).body(nuevoUsuario);
+    }
 
-        return ResponseEntity.ok(nuevoUsuario);
+    // Listar usuarios
+    @GetMapping
+    public ResponseEntity<?> listarUsuarios() {
+        return ResponseEntity.ok(usuarioRepository.findAll());
+    }
+
+    // Buscar usuario por correo
+    @GetMapping("/{correo}")
+    public ResponseEntity<?> buscarUsuario(@PathVariable String correo) {
+        Usuario usuario = usuarioRepository.findByCorreo(correo);
+
+        if (usuario == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(usuario);
+    }
+
+    // Actualizar usuario
+    @PutMapping("/{correo}")
+    public ResponseEntity<?> actualizarUsuario(
+            @PathVariable String correo,
+            @RequestBody Usuario datos) {
+
+        Usuario usuario = usuarioRepository.findByCorreo(correo);
+
+        if (usuario == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        usuario.setNombre(datos.getNombre());
+        usuario.setApellido(datos.getApellido());
+        usuario.setPassword(datos.getPassword());
+        usuario.setRol(datos.getRol());
+
+        return ResponseEntity.ok(usuarioRepository.save(usuario));
+    }
+
+    // Eliminar usuario
+    @DeleteMapping("/{correo}")
+    public ResponseEntity<?> eliminarUsuario(@PathVariable String correo) {
+        Usuario usuario = usuarioRepository.findByCorreo(correo);
+
+        if (usuario == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        usuarioRepository.delete(usuario);
+        return ResponseEntity.noContent().build();
     }
 }

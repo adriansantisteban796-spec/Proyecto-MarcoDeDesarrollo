@@ -40,4 +40,39 @@ public ResponseEntity<?> filtrarEquipos(
 
     return ResponseEntity.ok(equipos);
 }
+
+    // Actualizar equipo
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarEquipo(
+            @PathVariable Integer id,
+            @RequestBody Equipo datos) {
+
+        return equipoRepository.findById(id)
+                .map(equipo -> {
+                    equipo.setCodigo_inventario(datos.getCodigo_inventario());
+                    equipo.setNombre(datos.getNombre());
+                    equipo.setModelo(datos.getModelo());
+                    equipo.setNumero_serie(datos.getNumero_serie());
+                    equipo.setDescripcion(datos.getDescripcion());
+                    equipo.setId_categoria(datos.getId_categoria());
+                    equipo.setId_laboratorio(datos.getId_laboratorio());
+                    equipo.setId_estado(datos.getId_estado());
+
+                    return ResponseEntity.ok(
+                            equipoRepository.save(equipo));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Eliminar equipo
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarEquipo(@PathVariable Integer id) {
+
+        if (!equipoRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        equipoRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
