@@ -29,7 +29,8 @@ public class PrestamoController {
     @PutMapping("/{id}/devolucion")
     public ResponseEntity<?> registrarDevolucion(@PathVariable Integer id) {
         Optional<Prestamo> opt = prestamoRepository.findById(id);
-        if (opt.isEmpty()) return ResponseEntity.notFound().build();
+        if (opt.isEmpty())
+            return ResponseEntity.notFound().build();
 
         Prestamo prestamo = opt.get();
         prestamo.setFecha_devolucion(LocalDateTime.now());
@@ -42,5 +43,15 @@ public class PrestamoController {
             @RequestParam(required = false) Integer idEquipo,
             @RequestParam(required = false) String estado) {
         return ResponseEntity.ok(prestamoRepository.filtrarPrestamos(idEquipo, estado));
+    }
+
+    // RF-06: Eliminar préstamo
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarPrestamo(@PathVariable Integer id) {
+        if (!prestamoRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        prestamoRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }
