@@ -41,19 +41,7 @@
                 </div>
             </div>
 
-            <div class="mb-4">
-                <label for="rol" class="form-label fw-semibold text-secondary">Perfil / Rol de Acceso</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
-                    <select id="rol" class="form-select">
-                        <option value="Docente/Estudiante">Docente / Estudiante</option>
-                        <option value="Coordinador">Coordinador de Laboratorio</option>
-                        <option value="Tecnico">Tecnico de Soporte</option>
-                    </select>
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-login w-100 py-2 fw-semibold shadow-sm">
+            <button type="submit" class="btn btn-primary btn-login w-100 py-2 fw-semibold shadow-sm mt-2">
                 <i class="bi bi-box-arrow-in-right me-1"></i>Ingresar al Sistema
             </button>
         </form>
@@ -61,54 +49,90 @@
         <p class="login-footer text-center mt-4 mb-0">&copy; Innova Schools · Laboratorio</p>
     </div>
 
+
 <script>
     document.getElementById('togglePass').addEventListener('click', function () {
         const input = document.getElementById('password');
         const show = input.type === 'password';
+
         input.type = show ? 'text' : 'password';
-        this.querySelector('i').className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+
+        this.querySelector('i').className =
+            show ? 'bi bi-eye-slash' : 'bi bi-eye';
     });
 
-    document.getElementById('formLogin').addEventListener('submit', function(e) {
+    document.getElementById('formLogin').addEventListener('submit', async function (e) {
         e.preventDefault();
 
-        const correo = document.getElementById('correo').value;
+        const correo = document.getElementById('correo').value.trim();
         const password = document.getElementById('password').value;
-        const rol = document.getElementById('rol').value;
-
         const error = document.getElementById('loginError');
+
         error.classList.add('d-none');
 
-        fetch('/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                correo: correo,
-                password: password,
-                rol: rol
-            })
-        })
-        .then(respuesta => respuesta.text().then(texto => ({ ok: respuesta.ok, texto })))
-        .then(({ ok, texto }) => {
-            if (!ok) {
-                error.textContent = texto || 'No se pudo iniciar sesión';
+        try {
+            const respuesta = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    correo: correo,
+                    password: password
+                })
+            });
+
+            const texto = await respuesta.text();
+
+            if (!respuesta.ok) {
+                error.textContent = texto || 'Correo o contraseña incorrectos';
                 error.classList.remove('d-none');
                 return;
             }
-            localStorage.setItem('token', texto);
+
+            const token = texto.trim();
+
+            // Guardar el token JWT
+            localStorage.setItem('token', token);
             localStorage.setItem('usuarioActivo', correo);
-            // El rol real viene dentro del token (lo asigna la base de datos)
-            let rolReal = rol;
-            try { rolReal = JSON.parse(atob(texto.split('.')[1])).rol || rol; } catch (e) {}
+
+            // Obtener el rol real desde el token
+            let rolReal;
+
+            try {
+                const payload = token.split('.')[1];
+                const payloadBase64 = payload
+                    .replace(/-/g, '+')
+                    .replace(/_/g, '/');
+
+                rolReal = JSON.parse(atob(payloadBase64)).rol;
+            } catch (e) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('usuarioActivo');
+
+                error.textContent = 'No se pudo interpretar el token recibido';
+                error.classList.remove('d-none');
+                return;
+            }
+
+            if (!rolReal) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('usuarioActivo');
+
+                error.textContent = 'El token no contiene el rol del usuario';
+                error.classList.remove('d-none');
+                return;
+            }
+
             localStorage.setItem('rolActivo', rolReal);
+
+            // Redirigir al menú principal
             window.location.href = 'boostrap.html';
-        })
-        .catch(() => {
+
+        } catch (e) {
             error.textContent = 'No se pudo conectar con el servidor';
             error.classList.remove('d-none');
-        });
+        }
     });
 </script>
 </body>

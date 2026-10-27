@@ -25,8 +25,18 @@ public class JwtFilter extends OncePerRequestFilter {
 protected boolean shouldNotFilter(HttpServletRequest request) {
     String ruta = request.getServletPath();
 
-    return !ruta.startsWith("/api/equipos")
-            && !ruta.startsWith("/api/reservas");
+    // El registro de usuarios (POST /api/usuarios) sigue siendo publico
+    boolean usuariosProtegido = ruta.startsWith("/api/usuarios")
+            && !"POST".equals(request.getMethod());
+
+    return !(ruta.startsWith("/api/equipos")
+            || ruta.startsWith("/api/reservas")
+            || ruta.startsWith("/api/prestamos")
+            || ruta.startsWith("/api/incidencias")
+            || ruta.startsWith("/api/mantenimientos")
+            || ruta.startsWith("/api/historial")
+            || ruta.startsWith("/api/catalogos")
+            || usuariosProtegido);
 }
 
 

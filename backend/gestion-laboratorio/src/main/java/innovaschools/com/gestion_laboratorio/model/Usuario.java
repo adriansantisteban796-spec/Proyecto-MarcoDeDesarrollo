@@ -1,5 +1,7 @@
 package innovaschools.com.gestion_laboratorio.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -13,6 +15,7 @@ public class Usuario {
 
     private String nombre;
     private String apellido;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String rol;
 

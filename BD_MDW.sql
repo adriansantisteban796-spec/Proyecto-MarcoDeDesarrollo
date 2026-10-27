@@ -15,6 +15,12 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- Las tablas prestamo, incidencia y mantenimiento no estan en este script: las crea la
+-- aplicacion (Hibernate) al arrancar. Para que usen la misma collation que usuarios y equipo
+-- (y los JOIN entre ellas no fallen con "Illegal mix of collations") la base debe usar
+-- utf8mb4_general_ci por defecto.
+ALTER DATABASE CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
 --
 -- Table structure for table `categoria`
 --
@@ -136,38 +142,6 @@ LOCK TABLES `historial_movimiento` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `incidencia`
---
-
-DROP TABLE IF EXISTS `incidencia`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `incidencia` (
-  `id_incidencia` int NOT NULL AUTO_INCREMENT,
-  `id_equipo` int NOT NULL,
-  `id_usuario_reporta` int NOT NULL,
-  `severidad` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `fecha_reporte` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `estado_incidencia` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Abierta',
-  PRIMARY KEY (`id_incidencia`),
-  KEY `fk_incidencia_equipo` (`id_equipo`),
-  KEY `fk_incidencia_usuario` (`id_usuario_reporta`),
-  CONSTRAINT `fk_incidencia_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipo` (`id_equipo`),
-  CONSTRAINT `fk_incidencia_usuario` FOREIGN KEY (`id_usuario_reporta`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `incidencia`
---
-
-LOCK TABLES `incidencia` WRITE;
-/*!40000 ALTER TABLE `incidencia` DISABLE KEYS */;
-/*!40000 ALTER TABLE `incidencia` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `laboratorio`
 --
 
@@ -192,80 +166,6 @@ LOCK TABLES `laboratorio` WRITE;
 /*!40000 ALTER TABLE `laboratorio` DISABLE KEYS */;
 INSERT INTO `laboratorio` VALUES (1,'Lab A-101','Robotica y Automatizacion','Piso 1'),(2,'Lab B-204','Sistemas y Software','Piso 2');
 /*!40000 ALTER TABLE `laboratorio` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `mantenimiento`
---
-
-DROP TABLE IF EXISTS `mantenimiento`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `mantenimiento` (
-  `id_mantenimiento` int NOT NULL AUTO_INCREMENT,
-  `id_equipo` int NOT NULL,
-  `id_tecnico` int NOT NULL,
-  `tipo` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `fecha_inicio` date NOT NULL,
-  `fecha_fin` date DEFAULT NULL,
-  `descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `estado_mantenimiento` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Programado',
-  PRIMARY KEY (`id_mantenimiento`),
-  KEY `fk_mantenimiento_equipo` (`id_equipo`),
-  KEY `fk_mantenimiento_tecnico` (`id_tecnico`),
-  CONSTRAINT `fk_mantenimiento_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipo` (`id_equipo`),
-  CONSTRAINT `fk_mantenimiento_tecnico` FOREIGN KEY (`id_tecnico`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `mantenimiento`
---
-
-LOCK TABLES `mantenimiento` WRITE;
-/*!40000 ALTER TABLE `mantenimiento` DISABLE KEYS */;
-/*!40000 ALTER TABLE `mantenimiento` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `prestamo`
---
-
-DROP TABLE IF EXISTS `prestamo`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `prestamo` (
-  `id_prestamo` int NOT NULL AUTO_INCREMENT,
-  `id_reserva` int DEFAULT NULL,
-  `id_equipo` int NOT NULL,
-  `id_usuario_responsable` int NOT NULL,
-  `id_tecnico_entrega` int NOT NULL,
-  `id_tecnico_recibe` int DEFAULT NULL,
-  `fecha_salida` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_limite_devolucion` datetime NOT NULL,
-  `fecha_devolucion_real` datetime DEFAULT NULL,
-  `estado_prestamo` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Activo',
-  PRIMARY KEY (`id_prestamo`),
-  KEY `fk_prestamo_reserva` (`id_reserva`),
-  KEY `fk_prestamo_equipo` (`id_equipo`),
-  KEY `fk_prestamo_responsable` (`id_usuario_responsable`),
-  KEY `fk_prestamo_tec_entrega` (`id_tecnico_entrega`),
-  KEY `fk_prestamo_tec_recibe` (`id_tecnico_recibe`),
-  CONSTRAINT `fk_prestamo_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipo` (`id_equipo`),
-  CONSTRAINT `fk_prestamo_reserva` FOREIGN KEY (`id_reserva`) REFERENCES `reserva` (`id_reserva`),
-  CONSTRAINT `fk_prestamo_responsable` FOREIGN KEY (`id_usuario_responsable`) REFERENCES `usuario` (`id_usuario`),
-  CONSTRAINT `fk_prestamo_tec_entrega` FOREIGN KEY (`id_tecnico_entrega`) REFERENCES `usuario` (`id_usuario`),
-  CONSTRAINT `fk_prestamo_tec_recibe` FOREIGN KEY (`id_tecnico_recibe`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `prestamo`
---
-
-LOCK TABLES `prestamo` WRITE;
-/*!40000 ALTER TABLE `prestamo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `prestamo` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

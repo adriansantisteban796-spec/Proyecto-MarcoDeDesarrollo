@@ -16,6 +16,7 @@ public class Mantenimiento {
     private LocalDateTime fecha_inicio;
     private LocalDateTime fecha_fin;
     private String estado; // PROGRAMADO, FINALIZADO
+    private String tipo; // PREVENTIVO, CORRECTIVO
 
     public Integer getId_mantenimiento() { return id_mantenimiento; }
     public void setId_mantenimiento(Integer id_mantenimiento) { this.id_mantenimiento = id_mantenimiento; }
@@ -34,4 +35,6 @@ public class Mantenimiento {
 
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
 }

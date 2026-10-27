@@ -15,7 +15,8 @@ public class Incidencia {
     private String descripcion;
     private String reportado_por;
     private LocalDateTime fecha_reporte;
-    private String estado; // ABIERTA, CERRADA
+    private String estado; // ABIERTA, RESUELTO, CERRADA
+    private String severidad; // BAJA, MEDIA, ALTA, CRITICA
 
     public Integer getId_incidencia() { return id_incidencia; }
     public void setId_incidencia(Integer id_incidencia) { this.id_incidencia = id_incidencia; }
@@ -34,4 +35,6 @@ public class Incidencia {
 
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
+    public String getSeveridad() { return severidad; }
+    public void setSeveridad(String severidad) { this.severidad = severidad; }
 }

@@ -13,6 +13,7 @@ body.login-page {
     position: relative;
 }
 
+/* Círculos decorativos */
 body.login-page::before,
 body.login-page::after {
     content: "";

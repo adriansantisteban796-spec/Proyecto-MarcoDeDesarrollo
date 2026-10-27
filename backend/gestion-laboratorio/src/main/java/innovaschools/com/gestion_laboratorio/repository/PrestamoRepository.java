@@ -17,4 +17,10 @@ public interface PrestamoRepository extends JpaRepository<Prestamo, Integer> {
             @Param("idEquipo") Integer idEquipo,
             @Param("estado") String estado
     );
+
+    @Query("""
+        SELECT COUNT(p) > 0 FROM Prestamo p
+        WHERE p.id_equipo = :idEquipo AND p.estado = 'ACTIVO'
+    """)
+    boolean hayPrestamoActivo(@Param("idEquipo") Integer idEquipo);
 }

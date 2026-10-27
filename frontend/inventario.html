@@ -1,234 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innova Schools - Inventario y Préstamos</title>
+    <title>Innova Schools - Inventario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="Css/estilos.css">
+    <script src="Js/app.js"></script>
 </head>
 
 <body class="bg-light">
 
-    <nav class="bg-dark text-white py-2">
-        <div class="container-fluid d-flex justify-content-between align-items-center">
-            <span class="small text-secondary">Plataforma de Control y Préstamo de Laboratorio</span>
-            <div class="d-flex align-items-center">
-                <span class="badge bg-secondary me-3"><i class="bi bi-person-fill"></i>Rol: Estudiante / Docente</span>
-                <a href="boostrap.html" class="text-white text-decoration-none"></a>
-            </div>
-        </div>
-    </nav>
-
-    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="boostrap.html">Innova School</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="menuPrincipal">
-                <div class="navbar-nav ms-auto">
-                    <a class="nav-link" href="boostrap.html">Inicio</a>
-                    <a class="nav-link active fw-semibold" href="inventario.html">Inventario de Equipos</a>
-                    <a class="nav-link" href="prestamos.html">Préstamos Activos</a>
-                    <a class="nav-link" href="#seccionMantenmiento">Mantenimiento</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
     <div class="container my-5">
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 boreder-bottom">
-            <h2 class="fw-bold text-dark mb-1">Catalogo de Equipos y Disponibilidad</h2>
-            <p class="text-muted mb-0">Consulta el estado fisico de los activos y solicita reservas en tiempo real.</p>
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">Catálogo de Equipos y Disponibilidad</h2>
+                <p class="text-muted mb-0">Consulta el estado de los activos y solicita reservas.</p>
+            </div>
+            <div class="mt-3 mt-md-0">
+                <a href="reservas.html" class="btn btn-outline-primary me-2"><i
+                        class="bi bi-calendar-check me-1"></i>Mis Reservas</a>
+                <button class="btn btn-outline-danger me-2" id="btnNuevaIncidencia"><i
+                        class="bi bi-exclamation-triangle-fill me-1"></i>Reportar Incidencia</button>
+                <button class="btn btn-primary d-none" id="btnNuevoEquipo"><i
+                        class="bi bi-plus-circle me-1"></i>Registrar Equipo</button>
+            </div>
         </div>
-        <div class="mt-3 mt-md-0">
-            <a href="reservas.html" class="btn btn-outline-primary me-2"><i
-                    class="bi bi-calendar-check me-1"></i>Mis Reservas</a>
-            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalIncidencia"><i
-                    class="bi bi-exclamation-triangle-fill me-1"></i>Reportar Incidencia</button>
-        </div>
-    </div>
 
-    <div class="card-shadow-sm borderr-0 mb-4">
-        <div class="card-body">
-            <div class="row g-3 align-items-center">
-                <div class="cold-md-4">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-                        <input type="text" class="form-control" placeholder="Buscar por codigo, serie o nombre...">
+        <div id="aviso" class="alert d-none" role="alert"></div>
+
+        <!-- Filtros -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                            <input type="text" id="buscar" class="form-control"
+                                placeholder="Buscar por código, serie o nombre...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="filtroLab">
+                            <option value="">Todos los Laboratorios</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select" id="filtroCat">
+                            <option value="">Todas las Categorías</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select" id="filtroEstado">
+                            <option value="">Todos los Estados</option>
+                            <option value="1">Disponible</option>
+                            <option value="2">En Préstamo</option>
+                            <option value="3">En Mantenimiento</option>
+                            <option value="4">Bloqueado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-grid">
+                        <button class="btn btn-dark" id="btnFiltrar"><i class="bi bi-funnel me-1"></i>Filtrar</button>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <select class="form-select">
-                        <option selected>Todos los Laboratorios</option>
-                        <option> Lab A-101 (Robotica & Automatizacion)</option>
-                        <option> Lab B-204 (Sistemas & Software)</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-select">
-                        <option selected>Todos los Estados</option>
-                        <option>Disponibilidad</option>
-                        <option>En Préstamo</option>
-                        <option>En mantenimiento</option>
-                        <option>Bloqueado / Dañado</option>
-                    </select>
-                </div>
-                <div class="col-md-2 d-grid">
-                    <button class="btn btn-dark"><i class="bi bi-funnel"></i>Filtrar</button>
+            </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col" class="ps-3">Código</th>
+                                <th scope="col">Equipo / Modelo</th>
+                                <th scope="col">Categoría</th>
+                                <th scope="col">Ubicación</th>
+                                <th scope="col" class="text-center">Estado</th>
+                                <th scope="col" class="text-end pe-3">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaEquipos">
+                            <tr><td colspan="6" class="text-center text-muted py-4">Cargando...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Tabla con Badges y Acciones -->
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th scope="col" class="ps-3">Código</th>
-                            <th scope="col">Equipo / Modelo</th>
-                            <th scope="col">Categoría</th>
-                            <th scope="col">Ubicación</th>
-                            <th scope="col" class="text-center">Estado (Badge)</th>
-                            <th scope="col" class="text-end pe-3">Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
 
-                        <!-- Item 1: DISPONIBLE -->
-                        <tr>
-                            <td class="ps-3 fw-bold text-secondary">EQ-INN-101</td>
-                            <td>
-                                <div class="fw-semibold">Laptop Dell Precision 3560</div>
-                                <small class="text-muted">Intel i7 - 16GB RAM - 512GB SSD</small>
-                            </td>
-                            <td>Laptops / Cómputo</td>
-                            <td>Lab B-204</td>
-                            <td class="text-center">
-                                <span class="badge rounded-pill bg-success px-3 py-2">
-                                    <i class="bi bi-check-circle-fill me-1"></i> Disponible
-                                </span>
-                            </td>
-                            <td class="text-end pe-3">
-                                <button class="btn btn-sm btn-outline-info me-1" data-bs-toggle="modal"
-                                    data-bs-target="#modalDetalle" data-nombre="Laptop Dell Precision 3560"
-                                    data-codigo="EQ-INN-101" data-lab="Lab B-204">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#modalReserva"
-                                    data-equipo="Laptop Dell Precision 3560 (EQ-INN-101)" data-lab="Lab B-204">
-                                    <i class="bi bi-calendar-plus"></i> Reservar
-                                </button>
-                            </td>
-                        </tr>
-
-                        <!-- Item 2: PRESTADO -->
-                        <tr>
-                            <td class="ps-3 fw-bold text-secondary">EQ-INN-102</td>
-                            <td>
-                                <div class="fw-semibold">Kit Robótica LEGO Mindstorms EV3</div>
-                                <small class="text-muted">Set básico de servomotores y sensores</small>
-                            </td>
-                            <td>Robótica</td>
-                            <td>Lab A-101</td>
-                            <td class="text-center">
-                                <span class="badge rounded-pill bg-warning text-dark px-3 py-2">
-                                    <i class="bi bi-clock-history me-1"></i> En Préstamo
-                                </span>
-                            </td>
-                            <td class="text-end pe-3">
-                                <button class="btn btn-sm btn-outline-info me-1" data-bs-toggle="modal"
-                                    data-bs-target="#modalDetalle" data-nombre="Kit Robótica LEGO EV3"
-                                    data-codigo="EQ-INN-102" data-lab="Lab A-101">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                                <!-- Botón deshabilitado por regla de negocio -->
-                                <button class="btn btn-sm btn-secondary" disabled title="No disponible para reserva">
-                                    <i class="bi bi-lock-fill"></i> Ocupado
-                                </button>
-                            </td>
-                        </tr>
-
-                        <!-- Item 3: EN MANTENIMIENTO -->
-                        <tr>
-                            <td class="ps-3 fw-bold text-secondary">EQ-INN-103</td>
-                            <td>
-                                <div class="fw-semibold">Cámara Térmica FLIR C5</div>
-                                <small class="text-muted">Sensor infrarrojo para pruebas térmicas</small>
-                            </td>
-                            <td>Cámaras / Sensores</td>
-                            <td>Lab A-101</td>
-                            <td class="text-center">
-                                <span class="badge rounded-pill bg-info text-dark px-3 py-2">
-                                    <i class="bi bi-tools me-1"></i> Mantenimiento
-                                </span>
-                            </td>
-                            <td class="text-end pe-3">
-                                <button class="btn btn-sm btn-outline-info me-1" data-bs-toggle="modal"
-                                    data-bs-target="#modalDetalle" data-nombre="Cámara Térmica FLIR C5"
-                                    data-codigo="EQ-INN-103" data-lab="Lab A-101">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                                <button class="btn btn-sm btn-secondary" disabled>
-                                    <i class="bi bi-lock-fill"></i> Taller
-                                </button>
-                            </td>
-                        </tr>
-
-                        <!-- Item 4: BLOQUEADO / INCIDENCIA -->
-                        <tr>
-                            <td class="ps-3 fw-bold text-secondary">EQ-INN-104</td>
-                            <td>
-                                <div class="fw-semibold">Pack Sensores ESP32 IoT</div>
-                                <small class="text-muted">Microcontroladores Wi-Fi/Bluetooth</small>
-                            </td>
-                            <td>Sensores</td>
-                            <td>Lab B-204</td>
-                            <td class="text-center">
-                                <span class="badge rounded-pill bg-danger px-3 py-2">
-                                    <i class="bi bi-x-octagon-fill me-1"></i> Bloqueado
-                                </span>
-                            </td>
-                            <td class="text-end pe-3">
-                                <button class="btn btn-sm btn-outline-info me-1" data-bs-toggle="modal"
-                                    data-bs-target="#modalDetalle" data-nombre="Pack Sensores ESP32"
-                                    data-codigo="EQ-INN-104" data-lab="Lab B-204">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger" disabled>
-                                    <i class="bi bi-slash-circle"></i> Averiado
-                                </button>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    </div>
-
-    <!-- ==================== MODAL 1: RESERVA / PRÉSTAMO ==================== -->
-    <div class="modal fade" id="modalReserva" tabindex="-1" aria-labelledby="modalReservaLabel" aria-hidden="true">
+    <!-- ==================== MODAL: RESERVA ==================== -->
+    <div class="modal fade" id="modalReserva" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title fw-bold" id="modalReservaLabel"><i
-                            class="bi bi-calendar-check me-2"></i>Solicitar Reserva de Equipo</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Cerrar"></button>
+                    <h5 class="modal-title fw-bold"><i class="bi bi-calendar-check me-2"></i>Solicitar Reserva de Equipo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body p-4">
                     <form id="formReserva">
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Equipo a Solicitar</label>
-                            <input type="text" id="campoEquipoReserva" class="form-control bg-light"
-                                value="Laptop Dell Precision 3560 (EQ-INN-101)" readonly>
+                            <input type="text" id="campoEquipoReserva" class="form-control bg-light" readonly>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Laboratorio</label>
@@ -250,12 +126,6 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Finalidad Académica / Proyecto</label>
-                            <textarea class="form-control" rows="3"
-                                placeholder="Describe brevemente el uso que se le dará al equipo..."
-                                required></textarea>
-                        </div>
                         <div id="errorReserva" class="alert alert-danger py-2 small d-none"></div>
                         <div class="alert alert-info py-2 small mb-0">
                             <i class="bi bi-info-circle-fill me-1"></i> La solicitud quedará en estado
@@ -271,35 +141,54 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL 2: DETALLES DEL ACTIVO ==================== -->
-    <div class="modal fade" id="modalDetalle" tabindex="-1" aria-labelledby="modalDetalleLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+    <!-- ==================== MODAL: FICHA DEL EQUIPO ==================== -->
+    <div class="modal fade" id="modalDetalle" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title fw-bold" id="modalDetalleLabel"><i class="bi bi-info-circle me-2"></i>Ficha
-                        Técnica del Equipo</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Cerrar"></button>
+                    <h5 class="modal-title fw-bold"><i class="bi bi-info-circle me-2"></i>Ficha Técnica del Equipo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <ul class="list-group list-group-flush">
+                    <ul class="list-group list-group-flush mb-3">
                         <li class="list-group-item d-flex justify-content-between">
-                            <span class="text-muted">Código de Inventario:</span>
-                            <strong id="detCodigo">EQ-INN-101</strong>
+                            <span class="text-muted">Código de Inventario:</span><strong id="detCodigo"></strong>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
-                            <span class="text-muted">Nombre del Dispositivo:</span>
-                            <strong id="detNombre">Laptop Dell Precision 3560</strong>
+                            <span class="text-muted">Equipo:</span><strong id="detNombre"></strong>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
-                            <span class="text-muted">Ubicación Predeterminada:</span>
-                            <span class="badge bg-light text-dark border" id="detLab">Lab B-204</span>
+                            <span class="text-muted">Modelo / N° de serie:</span><span id="detModelo"></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
-                            <span class="text-muted">Último Mantenimiento:</span>
-                            <span>15 de Agosto, 2026</span>
+                            <span class="text-muted">Categoría:</span><span id="detCategoria"></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span class="text-muted">Ubicación:</span>
+                            <span class="badge bg-light text-dark border" id="detLab"></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span class="text-muted">Estado actual:</span><span id="detEstado"></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span class="text-muted">Último mantenimiento:</span><span id="detMantenimiento">Cargando...</span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="text-muted">Descripción:</span> <span id="detDescripcion"></span>
                         </li>
                     </ul>
+
+                    <h6 class="fw-bold"><i class="bi bi-clock-history me-1"></i>Historial del equipo</h6>
+                    <div class="table-responsive border rounded">
+                        <table class="table table-sm mb-0">
+                            <thead class="table-light">
+                                <tr><th class="ps-3">Fecha</th><th>Evento</th><th>Detalle</th></tr>
+                            </thead>
+                            <tbody id="detHistorial">
+                                <tr><td colspan="3" class="text-center text-muted py-3">Cargando...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -308,118 +197,436 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL 3: REGISTRO DE INCIDENCIA ==================== -->
-    <div class="modal fade" id="modalIncidencia" tabindex="-1" aria-labelledby="modalIncidenciaLabel"
-        aria-hidden="true">
+    <!-- ==================== MODAL: INCIDENCIA ==================== -->
+    <div class="modal fade" id="modalIncidencia" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title fw-bold" id="modalIncidenciaLabel"><i
-                            class="bi bi-shield-exclamation me-2"></i>Reporte de Incidencia o Falla</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Cerrar"></button>
+                    <h5 class="modal-title fw-bold"><i class="bi bi-shield-exclamation me-2"></i>Reporte de Incidencia o Falla</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body p-4">
                     <form id="formIncidencia">
                         <div class="mb-3">
-                            <label class="form-label fw-semibold">Seleccionar Equipo Afectado</label>
-                            <select class="form-select" required>
+                            <label class="form-label fw-semibold">Equipo Afectado</label>
+                            <select class="form-select" id="incEquipo" required>
                                 <option value="">Selecciona el equipo...</option>
-                                <option>EQ-INN-101 - Laptop Dell Precision 3560</option>
-                                <option>EQ-INN-102 - Kit Robótica LEGO Mindstorms EV3</option>
-                                <option>EQ-INN-103 - Cámara Térmica FLIR C5</option>
-                                <option>EQ-INN-104 - Pack Sensores ESP32 IoT</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Severidad de la Falla</label>
-                            <select class="form-select text-danger fw-semibold" required>
-                                <option value="leve">Leve (Uso operativo con observación)</option>
-                                <option value="moderada">Moderada (Requiere revisión técnica)</option>
-                                <option value="critica" selected>Crítica (Bloqueo automático inmediato)</option>
+                            <select class="form-select fw-semibold" id="incSeveridad" required>
+                                <option value="BAJA">Baja (uso operativo con observación)</option>
+                                <option value="MEDIA" selected>Media (requiere revisión técnica)</option>
+                                <option value="ALTA">Alta (requiere atención pronto)</option>
+                                <option value="CRITICA">Crítica (bloquea el equipo de inmediato)</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Detalle de la Observación</label>
-                            <textarea class="form-control" rows="3"
+                            <textarea class="form-control" id="incDescripcion" rows="3"
                                 placeholder="Explica qué fallo presenta el equipo (ej. pantalla rota, no enciende, sensor descalibrado)..."
                                 required></textarea>
+                        </div>
+                        <div id="errorIncidencia" class="alert alert-danger py-2 small d-none mb-0"></div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger px-4" id="btnEnviarIncidencia">Registrar Incidencia</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: REGISTRAR / EDITAR EQUIPO ==================== -->
+    <div class="modal fade" id="modalEquipo" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold" id="tituloEquipo"><i class="bi bi-laptop me-2"></i>Registrar Equipo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formEquipo">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Código de inventario</label>
+                                <input type="text" id="eqCodigo" class="form-control" placeholder="INV-002" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">N° de serie</label>
+                                <input type="text" id="eqSerie" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Nombre</label>
+                                <input type="text" id="eqNombre" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Modelo</label>
+                                <input type="text" id="eqModelo" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Categoría</label>
+                                <select id="eqCategoria" class="form-select" required>
+                                    <option value="">Selecciona...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Laboratorio</label>
+                                <select id="eqLaboratorio" class="form-select" required>
+                                    <option value="">Selecciona...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Descripción</label>
+                            <textarea id="eqDescripcion" class="form-control" rows="2"></textarea>
+                        </div>
+                        <div id="errorEquipo" class="alert alert-danger py-2 small d-none"></div>
+                        <div class="alert alert-info py-2 small mb-0">
+                            <i class="bi bi-info-circle-fill me-1"></i> Todo equipo nuevo se registra como
+                            <strong>Disponible</strong>. Su estado cambia solo con préstamos, incidencias y mantenimientos.
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger px-4" data-bs-dismiss="modal"
-                        onclick="alert('Incidencia registrada. Si es crítica, el equipo pasará a estado Bloqueado.')">Registrar
-                        Incidencia</button>
+                    <button type="button" class="btn btn-primary px-4" id="btnGuardarEquipo">Guardar</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
-        const modalDetalleEl = document.getElementById('modalDetalle');
-        if(modalDetalleEl){
-            modalDetalleEl.addEventListener('show.bs.modal', function(event){
-                const button = event.relatedTarget;
-                const nombre = button.getAttribute('data-nombre');
-                const codigo = button.getAttribute('data-codigo');
-                const lab = button.getAttribute('data-lab');
+        montarLayout('inventario', 'Plataforma de Control y Préstamo de Laboratorio');
 
-                document.getElementById('detNombre').textContent = nombre;
-                document.getElementById('detCodigo').textContent = codigo;
-                document.getElementById('detLab').textContent = lab;
-            });
+        let catalogos = { laboratorios: [], categorias: [] };
+        let equipos = [];       // resultado de los filtros (lo que muestra la tabla)
+        let equiposTodos = [];  // todos los equipos (para los selectores)
+        let equipoEnEdicion = null;
+
+        const modal = id => bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
+        const porId = id => equiposTodos.find(e => e.id_equipo === id) || equipos.find(e => e.id_equipo === id);
+
+        function llenarSelect(select, lista, valor, texto) {
+            lista.forEach(item => select.add(new Option(texto(item), valor(item))));
         }
 
-        const modalReservaEl = document.getElementById('modalReserva');
-        modalReservaEl.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget;
-            document.getElementById('formReserva').reset();
-            if (button) {
-                document.getElementById('campoEquipoReserva').value = button.getAttribute('data-equipo');
-                document.getElementById('campoLabReserva').value = button.getAttribute('data-lab');
-            }
-            document.getElementById('campoFechaReserva').min = new Date().toISOString().split('T')[0];
-            document.getElementById('errorReserva').classList.add('d-none');
-        });
+        async function iniciar() {
+            catalogos = await cargarCatalogos();
 
-        document.getElementById('btnEnviarReserva').addEventListener('click', function () {
+            ['filtroLab', 'eqLaboratorio'].forEach(id => llenarSelect(
+                document.getElementById(id), catalogos.laboratorios,
+                l => l.id, l => l.codigo + ' (' + l.nombre + ')'));
+
+            ['filtroCat', 'eqCategoria'].forEach(id => llenarSelect(
+                document.getElementById(id), catalogos.categorias,
+                c => c.id, c => c.nombre));
+
+            if (Sesion.esCoordinador()) {
+                document.getElementById('btnNuevoEquipo').classList.remove('d-none');
+            }
+
+            await recargar();
+        }
+
+        // Los filtros los aplica el backend (GET /api/equipos?idLaboratorio=..&idCategoria=..&idEstado=..)
+        async function recargar() {
+            const params = new URLSearchParams();
+            const lab = document.getElementById('filtroLab').value;
+            const cat = document.getElementById('filtroCat').value;
+            const est = document.getElementById('filtroEstado').value;
+
+            if (lab) params.set('idLaboratorio', lab);
+            if (cat) params.set('idCategoria', cat);
+            if (est) params.set('idEstado', est);
+
+            const consulta = params.toString();
+            const [filtrados, todos] = await Promise.all([
+                api('/api/equipos' + (consulta ? '?' + consulta : '')),
+                api('/api/equipos')
+            ]);
+
+            if (!filtrados.ok || !todos.ok) {
+                document.getElementById('tablaEquipos').innerHTML =
+                    '<tr><td colspan="6" class="text-center text-danger py-4">No se pudieron cargar los equipos.</td></tr>';
+                return;
+            }
+
+            equipos = filtrados.datos;
+            equiposTodos = todos.datos;
+
+            const select = document.getElementById('incEquipo');
+            select.length = 1;
+            equiposTodos.forEach(e => select.add(new Option(e.codigo_inventario + ' - ' + e.nombre, e.id_equipo)));
+
+            pintar();
+        }
+
+        function botonesAccion(e) {
+            let html = `<button class="btn btn-sm btn-outline-info me-1" data-accion="ver" data-id="${e.id_equipo}" title="Ver ficha"><i class="bi bi-eye"></i></button>`;
+
+            if (e.id_estado === 1 || e.id_estado === 2) {
+                html += `<button class="btn btn-sm btn-primary" data-accion="reservar" data-id="${e.id_equipo}"><i class="bi bi-calendar-plus"></i> Reservar</button>`;
+            } else if (e.id_estado === 3) {
+                html += `<button class="btn btn-sm btn-secondary" disabled><i class="bi bi-lock-fill"></i> Taller</button>`;
+            } else {
+                html += `<button class="btn btn-sm btn-danger" disabled><i class="bi bi-slash-circle"></i> Bloqueado</button>`;
+            }
+
+            if (Sesion.esCoordinador()) {
+                html += ` <button class="btn btn-sm btn-outline-secondary ms-1" data-accion="editar" data-id="${e.id_equipo}" title="Editar"><i class="bi bi-pencil"></i></button>`
+                    + `<button class="btn btn-sm btn-outline-danger ms-1" data-accion="eliminar" data-id="${e.id_equipo}" title="Eliminar"><i class="bi bi-trash"></i></button>`;
+            }
+
+            return html;
+        }
+
+        function pintar() {
+            const texto = document.getElementById('buscar').value.trim().toLowerCase();
+            const lista = equipos.filter(e => !texto || [e.codigo_inventario, e.nombre, e.numero_serie, e.modelo]
+                .some(v => (v || '').toLowerCase().includes(texto)));
+
+            const tbody = document.getElementById('tablaEquipos');
+
+            if (lista.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">No hay equipos que coincidan.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = lista.map(e => `
+                <tr>
+                    <td class="ps-3 fw-bold text-secondary">${escapar(e.codigo_inventario)}</td>
+                    <td>
+                        <div class="fw-semibold">${escapar(e.nombre)}</div>
+                        <small class="text-muted">${escapar(e.modelo)}${e.numero_serie ? ' · S/N ' + escapar(e.numero_serie) : ''}</small>
+                    </td>
+                    <td>${escapar(nombreCategoria(catalogos, e.id_categoria))}</td>
+                    <td>${escapar(nombreLaboratorio(catalogos, e.id_laboratorio))}</td>
+                    <td class="text-center">${badgeEstadoEquipo(e.id_estado)}</td>
+                    <td class="text-end pe-3">${botonesAccion(e)}</td>
+                </tr>`).join('');
+        }
+
+        // ---------- Ficha e historial ----------
+        const TIPOS_EVENTO = {
+            PRESTAMO_SALIDA: 'Salida en préstamo',
+            PRESTAMO_DEVOLUCION: 'Devolución',
+            INCIDENCIA: 'Incidencia',
+            MANTENIMIENTO_INICIO: 'Inicio de mantenimiento',
+            MANTENIMIENTO_FIN: 'Fin de mantenimiento',
+            RESERVA: 'Reserva'
+        };
+
+        async function abrirFicha(e) {
+            document.getElementById('detCodigo').textContent = e.codigo_inventario;
+            document.getElementById('detNombre').textContent = e.nombre;
+            document.getElementById('detModelo').textContent = (e.modelo || '—') + ' / ' + (e.numero_serie || '—');
+            document.getElementById('detCategoria').textContent = nombreCategoria(catalogos, e.id_categoria);
+            document.getElementById('detLab').textContent = nombreLaboratorio(catalogos, e.id_laboratorio);
+            document.getElementById('detEstado').innerHTML = badgeEstadoEquipo(e.id_estado);
+            document.getElementById('detDescripcion').textContent = e.descripcion || '—';
+            document.getElementById('detMantenimiento').textContent = 'Cargando...';
+            document.getElementById('detHistorial').innerHTML =
+                '<tr><td colspan="3" class="text-center text-muted py-3">Cargando...</td></tr>';
+            modal('modalDetalle').show();
+
+            const r = await api('/api/historial/' + e.id_equipo);
+
+            if (!r.ok) {
+                document.getElementById('detMantenimiento').textContent = '—';
+                document.getElementById('detHistorial').innerHTML =
+                    '<tr><td colspan="3" class="text-center text-danger py-3">No se pudo cargar el historial.</td></tr>';
+                return;
+            }
+
+            const eventos = r.datos.eventos;
+            const cierres = eventos.filter(x => x.tipo === 'MANTENIMIENTO_FIN');
+
+            document.getElementById('detMantenimiento').textContent =
+                cierres.length ? fmtFecha(cierres[cierres.length - 1].fecha) : 'Sin mantenimientos concluidos';
+
+            document.getElementById('detHistorial').innerHTML = eventos.length
+                ? eventos.map(x => `<tr><td class="ps-3 text-nowrap">${fmtFecha(x.fecha)}</td>
+                    <td>${escapar(TIPOS_EVENTO[x.tipo] || x.tipo)}</td><td>${escapar(x.detalle)}</td></tr>`).join('')
+                : '<tr><td colspan="3" class="text-center text-muted py-3">Este equipo aún no tiene movimientos.</td></tr>';
+        }
+
+        // ---------- Reserva ----------
+        function abrirReserva(e) {
+            document.getElementById('formReserva').reset();
+            document.getElementById('errorReserva').classList.add('d-none');
+            document.getElementById('campoEquipoReserva').value = e.nombre + ' (' + e.codigo_inventario + ')';
+            document.getElementById('campoLabReserva').value = nombreLaboratorio(catalogos, e.id_laboratorio);
+            document.getElementById('campoFechaReserva').min = hoyISO();
+            document.getElementById('btnEnviarReserva').dataset.id = e.id_equipo;
+            modal('modalReserva').show();
+        }
+
+        document.getElementById('btnEnviarReserva').addEventListener('click', async function () {
             const form = document.getElementById('formReserva');
             const error = document.getElementById('errorReserva');
             error.classList.add('d-none');
 
             if (!form.reportValidity()) return;
 
+            const e = porId(Number(this.dataset.id));
             const [horaInicio, horaFin] = document.getElementById('campoHorarioReserva').value.split('|');
 
-            fetch('/api/reservas', {
+            const r = await api('/api/reservas', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    laboratorio: document.getElementById('campoLabReserva').value,
+                body: {
+                    laboratorio: String(e.id_laboratorio),
+                    id_equipo: e.id_equipo,
                     fecha: document.getElementById('campoFechaReserva').value,
                     horaInicio: horaInicio,
                     horaFin: horaFin
-                })
-            })
-            .then(res => res.text().then(texto => ({ ok: res.ok, texto })))
-            .then(({ ok, texto }) => {
-                if (!ok) {
-                    error.textContent = texto || 'No se pudo registrar la reserva.';
-                    error.classList.remove('d-none');
-                    return;
                 }
-                bootstrap.Modal.getInstance(modalReservaEl).hide();
-                alert('¡Solicitud de reserva registrada! Quedó en estado Pendiente.');
-            })
-            .catch(() => {
-                error.textContent = 'No se pudo conectar con el servidor.';
-                error.classList.remove('d-none');
             });
+
+            if (!r.ok) {
+                error.textContent = mensajeError(r);
+                error.classList.remove('d-none');
+                return;
+            }
+
+            modal('modalReserva').hide();
+            mostrarAviso('aviso', 'Solicitud de reserva registrada. Quedó en estado Pendiente hasta la aprobación del Coordinador.', 'success');
         });
+
+        // ---------- Incidencia ----------
+        document.getElementById('btnNuevaIncidencia').addEventListener('click', () => {
+            document.getElementById('formIncidencia').reset();
+            document.getElementById('errorIncidencia').classList.add('d-none');
+            modal('modalIncidencia').show();
+        });
+
+        document.getElementById('btnEnviarIncidencia').addEventListener('click', async function () {
+            const form = document.getElementById('formIncidencia');
+            const error = document.getElementById('errorIncidencia');
+            error.classList.add('d-none');
+
+            if (!form.reportValidity()) return;
+
+            const severidad = document.getElementById('incSeveridad').value;
+
+            const r = await api('/api/incidencias', {
+                method: 'POST',
+                body: {
+                    id_equipo: Number(document.getElementById('incEquipo').value),
+                    severidad: severidad,
+                    descripcion: document.getElementById('incDescripcion').value.trim()
+                }
+            });
+
+            if (!r.ok) {
+                error.textContent = mensajeError(r);
+                error.classList.remove('d-none');
+                return;
+            }
+
+            modal('modalIncidencia').hide();
+            mostrarAviso('aviso', severidad === 'CRITICA'
+                ? 'Incidencia registrada. El equipo quedó Bloqueado hasta que se resuelva.'
+                : 'Incidencia registrada.', 'success');
+            await recargar();
+        });
+
+        // ---------- Registrar / editar equipo (Coordinador) ----------
+        document.getElementById('btnNuevoEquipo').addEventListener('click', () => abrirFormEquipo(null));
+
+        function abrirFormEquipo(e) {
+            equipoEnEdicion = e;
+            document.getElementById('formEquipo').reset();
+            document.getElementById('errorEquipo').classList.add('d-none');
+            document.getElementById('tituloEquipo').innerHTML =
+                '<i class="bi bi-laptop me-2"></i>' + (e ? 'Editar Equipo' : 'Registrar Equipo');
+
+            if (e) {
+                document.getElementById('eqCodigo').value = e.codigo_inventario || '';
+                document.getElementById('eqSerie').value = e.numero_serie || '';
+                document.getElementById('eqNombre').value = e.nombre || '';
+                document.getElementById('eqModelo').value = e.modelo || '';
+                document.getElementById('eqCategoria').value = e.id_categoria;
+                document.getElementById('eqLaboratorio').value = e.id_laboratorio;
+                document.getElementById('eqDescripcion').value = e.descripcion || '';
+            }
+
+            modal('modalEquipo').show();
+        }
+
+        document.getElementById('btnGuardarEquipo').addEventListener('click', async function () {
+            const form = document.getElementById('formEquipo');
+            const error = document.getElementById('errorEquipo');
+            error.classList.add('d-none');
+
+            if (!form.reportValidity()) return;
+
+            const datos = {
+                codigo_inventario: document.getElementById('eqCodigo').value.trim(),
+                numero_serie: document.getElementById('eqSerie').value.trim(),
+                nombre: document.getElementById('eqNombre').value.trim(),
+                modelo: document.getElementById('eqModelo').value.trim(),
+                descripcion: document.getElementById('eqDescripcion').value.trim(),
+                id_categoria: Number(document.getElementById('eqCategoria').value),
+                id_laboratorio: Number(document.getElementById('eqLaboratorio').value)
+            };
+
+            // Al editar se conserva el estado actual (lo calcula el sistema)
+            if (equipoEnEdicion) {
+                datos.id_estado = equipoEnEdicion.id_estado;
+            }
+
+            const r = equipoEnEdicion
+                ? await api('/api/equipos/' + equipoEnEdicion.id_equipo, { method: 'PUT', body: datos })
+                : await api('/api/equipos', { method: 'POST', body: datos });
+
+            if (!r.ok) {
+                error.textContent = mensajeError(r);
+                error.classList.remove('d-none');
+                return;
+            }
+
+            modal('modalEquipo').hide();
+            mostrarAviso('aviso', equipoEnEdicion ? 'Equipo actualizado.' : 'Equipo registrado como Disponible.', 'success');
+            await recargar();
+        });
+
+        async function eliminarEquipo(e) {
+            if (!confirm('¿Eliminar el equipo ' + e.codigo_inventario + ' (' + e.nombre + ')?')) return;
+
+            const r = await api('/api/equipos/' + e.id_equipo, { method: 'DELETE' });
+
+            if (!r.ok) {
+                mostrarAviso('aviso', 'No se pudo eliminar el equipo. Si tiene préstamos, incidencias o mantenimientos registrados no se puede borrar.', 'danger');
+                return;
+            }
+
+            mostrarAviso('aviso', 'Equipo eliminado.', 'success');
+            await recargar();
+        }
+
+        // ---------- Eventos de la tabla y filtros ----------
+        document.getElementById('tablaEquipos').addEventListener('click', ev => {
+            const boton = ev.target.closest('button[data-accion]');
+            if (!boton) return;
+
+            const e = porId(Number(boton.dataset.id));
+            if (!e) return;
+
+            ({ ver: abrirFicha, reservar: abrirReserva, editar: abrirFormEquipo, eliminar: eliminarEquipo })[boton.dataset.accion](e);
+        });
+
+        document.getElementById('btnFiltrar').addEventListener('click', recargar);
+        document.getElementById('buscar').addEventListener('input', pintar);
+
+        iniciar();
     </script>
 </body>
 

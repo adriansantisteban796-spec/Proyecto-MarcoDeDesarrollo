@@ -7,6 +7,7 @@ import innovaschools.com.gestion_laboratorio.model.LoginRequest;
 import innovaschools.com.gestion_laboratorio.model.Usuario;
 import innovaschools.com.gestion_laboratorio.repository.UsuarioRepository;
 import innovaschools.com.gestion_laboratorio.service.JwtService;
+import innovaschools.com.gestion_laboratorio.service.PasswordService;
 
 import java.util.Map;
 
@@ -16,15 +17,18 @@ public class LoginController {
 
     private final UsuarioRepository usuarioRepository;
     private final JwtService jwtService;
+    private final PasswordService passwordService;
 
     public LoginController(
             UsuarioRepository usuarioRepository,
-            JwtService jwtService) {
+            JwtService jwtService,
+            PasswordService passwordService) {
 
         this.usuarioRepository = usuarioRepository;
         this.jwtService = jwtService;
+        this.passwordService = passwordService;
     }
-    
+
 @PostMapping
 public ResponseEntity<?> iniciarSesion(@RequestBody LoginRequest loginRequest) {
 
@@ -45,9 +49,16 @@ public ResponseEntity<?> iniciarSesion(@RequestBody LoginRequest loginRequest) {
                 .body("Correo o contraseña incorrectos");
     }
 
-    if (!usuario.getPassword().equals(loginRequest.getPassword())) {
+    if (!passwordService.coincide(
+            loginRequest.getPassword(), usuario.getPassword())) {
         return ResponseEntity.status(401)
                 .body("Correo o contraseña incorrectos");
+    }
+
+    // Las claves guardadas sin cifrar se cifran en el primer inicio de sesion
+    if (!passwordService.estaCifrada(usuario.getPassword())) {
+        usuario.setPassword(passwordService.cifrar(loginRequest.getPassword()));
+        usuarioRepository.save(usuario);
     }
 
     String token = jwtService.generarToken(
@@ -83,4 +94,3 @@ public ResponseEntity<?> obtenerUsuarioAutenticado(
     ));
 }
 }
-

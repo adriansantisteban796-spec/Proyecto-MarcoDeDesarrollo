@@ -17,4 +17,12 @@ public interface IncidenciaRepository extends JpaRepository<Incidencia, Integer>
             @Param("idEquipo") Integer idEquipo,
             @Param("estado") String estado
     );
+
+    @Query("""
+        SELECT COUNT(i) > 0 FROM Incidencia i
+        WHERE i.id_equipo = :idEquipo
+        AND i.severidad = 'CRITICA'
+        AND i.estado NOT IN ('RESUELTO', 'CERRADA')
+    """)
+    boolean hayCriticaAbierta(@Param("idEquipo") Integer idEquipo);
 }

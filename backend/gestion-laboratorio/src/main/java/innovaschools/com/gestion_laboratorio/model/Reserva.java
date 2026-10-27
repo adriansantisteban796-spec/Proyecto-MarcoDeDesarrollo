@@ -15,6 +15,8 @@ public class Reserva {
     private String horaInicio;
     private String horaFin;
     private String estado; // PENDIENTE, APROBADA, CANCELADA
+    private Integer id_equipo; // opcional: equipo especifico que se reserva
+    private String solicitante; // correo de quien registra la reserva
 
     public Integer getId_reserva() {
         return id_reserva;
@@ -54,6 +56,22 @@ public class Reserva {
 
     public void setHoraFin(String horaFin) {
         this.horaFin = horaFin;
+    }
+
+    public Integer getId_equipo() {
+        return id_equipo;
+    }
+
+    public void setId_equipo(Integer id_equipo) {
+        this.id_equipo = id_equipo;
+    }
+
+    public String getSolicitante() {
+        return solicitante;
+    }
+
+    public void setSolicitante(String solicitante) {
+        this.solicitante = solicitante;
     }
 
     public String getEstado() {

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import innovaschools.com.gestion_laboratorio.model.Equipo;
 import innovaschools.com.gestion_laboratorio.repository.EquipoRepository;
+import innovaschools.com.gestion_laboratorio.service.EquipoEstadoService;
 
 @RestController
 @RequestMapping("/api/equipos")
@@ -20,6 +21,9 @@ public class EquipoController {
 
     @PostMapping
     public ResponseEntity<?> registrarEquipo(@RequestBody Equipo equipo) {
+
+        // Todo equipo nuevo se registra como "Disponible"
+        equipo.setId_estado(EquipoEstadoService.DISPONIBLE);
 
         Equipo nuevoEquipo = equipoRepository.save(equipo);
 
